@@ -68,6 +68,35 @@ function select(selector) {
 
     }
 }
-select('div')
-select('#test')
-select('.real')
+/*
+* 元素拖拽
+* */
+var getClass = function (target, key) {
+    return target.currentStyle ? target.currentStyle[key] : document.defaultView.getComputedStyle(target, false)[key];
+}
+function drag(target) {
+    this.params = {
+        left: getClass(target, 'left'),
+        top: getClass(target, 'top'),
+        currentX: 0,
+        currentY: 0,
+        flag: false
+    }
+    var temp = this;
+    target.onmousedown = function (e) {
+        temp.params.flag = true;
+        temp.params.currentX = e.clientX;
+        temp.params.currentY = e.clientY;
+    }
+    document.onmousemove = function (e) {
+        if(temp.params.flag) {
+            target.style.left = parseInt(temp.params.left) + (e.clientX - temp.params.currentX) + 'px';
+            target.style.top = parseInt(temp.params.top) + (e.clientY - temp.params.currentY) + 'px';
+        }
+    }
+    document.onmouseup = function (e) {
+        temp.params.flag = false;
+        temp.params.left = getClass(target, 'left');
+        temp.params.top = getClass(target, 'top');
+    }
+}

@@ -3,30 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #target{
+            width: 200px;
+            height: 200px;
+            background: red;
+            position: absolute;
+            left: 50px;
+            top: 50px;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        <div>1234567</div>
-        <div class="real">真是个故事</div>
-        <div>为什么呐</div>
-        <p>但是警方快速打击</p>
-        <span id="test">测试</span>
+    <div id="demo">
+        <div id="target">
+            <div id="inner" style="margin-left: 100px">inner</div>
+        </div>
     </div>
     <script>
-        function select(selector) {
-            var type = selector.substring(0,1);
-            switch (type) {
-                case '.':
-                    return 1
-                case '#':
-                    return document.getElementById(selector.substring(1))
-                default:
-                    return document.getElementsByTagName(selector)
+        var params = {
+            left: 0,
+            top: 0,
+            currentX: 0,
+            currentY: 0,
+            flag: false
+        };
+        var target = document.getElementById('target');
+        var inner = document.getElementById('demo');
+        //获取相关CSS属性
+        var getClass = function(o,key){
+            return o.currentStyle? o.currentStyle[key] : document.defaultView.getComputedStyle(o,false)[key];
+        };
+//        function drag(target) {
+//            if(getCss(target, "left") !== "auto"){
+//                params.left = getCss(target, "left");
+//            }
+//            if(getCss(target, "top") !== "auto"){
+//                params.top = getCss(target, "top");
+//            }
+//            target.onmousedown = function (e) {
+//                params.flag = true;
+//                params.currentY = e.clientY;
+//                params.currentX = e.clientX;
+//            }
+//            document.onmousemove = function (e) {
+//                if(params.flag) {
+//                    target.style.left = parseInt(params.left) + (e.clientX - params.currentX) + 'px'
+//                    target.style.top = parseInt(params.top) + (e.clientY - params.currentY) + 'px'
+//                }
+//            }
+//            document.onmouseup = function (e) {
+//                params.flag = false
+//                if(getCss(target, "left") !== "auto"){
+//                    params.left = getCss(target, "left");
+//                }
+//                if(getCss(target, "top") !== "auto"){
+//                    params.top = getCss(target, "top");
+//                }
+//            }
+//        }
+        function drag(target) {
+            this.params = {
+                left:0,
+                top:0,
+                currentX: 0,
+                currentY: 0,
+                flag: false
+            }
+            var temp = this;
+            target.onmousedown = function (e) {
+                if(getClass(target, 'left')  !== 'auto') {
+                    temp.params.left = getClass(target, 'left');
+                }
+                if(getClass(target, 'top')  !== 'auto') {
+                    temp.params.top = getClass(target, 'top');
+                }
+                temp.params.flag = true;
+                temp.params.currentX = e.clientX;
+                temp.params.currentY = e.clientY;
+            }
+            document.onmousemove = function (e) {
+                if(temp.params.flag) {
+                    target.style.left = parseInt(temp.params.left) + (e.clientX - temp.params.currentX) + 'px';
+                    target.style.top = parseInt(temp.params.top) + (e.clientY - temp.params.currentY) + 'px';
+                }
+            }
+            document.onmouseup = function (e) {
+                temp.params.flag = false;
+                if(getClass(target, 'left') !== 'auto') {
+                    temp.params.left = getClass(target, 'left');
+                }
+                if(getClass(target, 'top')  !== 'auto') {
+                    temp.params.top = getClass(target, 'top');
+                }
             }
         }
-        console.log(select('.real'))
-        console.log(select('#test').innerHTML)
-        console.log(select('p'))
+        new drag(inner)
     </script>
 </body>
 </html>
