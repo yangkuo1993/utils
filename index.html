@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <div>1234567</div>
+        <div class="real">真是个故事</div>
+        <div>为什么呐</div>
+        <p>但是警方快速打击</p>
+        <span id="test">测试</span>
+    </div>
+    <script>
+        function select(selector) {
+            var type = selector.substring(0,1);
+            switch (type) {
+                case '.':
+                    return 1
+                case '#':
+                    return document.getElementById(selector.substring(1))
+                default:
+                    return document.getElementsByTagName(selector)
+            }
+        }
+        console.log(select('.real'))
+        console.log(select('#test').innerHTML)
+        console.log(select('p'))
+    </script>
+</body>
+</html>
